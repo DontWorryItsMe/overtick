@@ -11,12 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'your_secret_key')
+SECRET_KEY = config('SECRET_KEY', default='your_secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', '') != 'False'
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost, 127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost, 127.0.0.1').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -108,11 +108,11 @@ WSGI_APPLICATION = 'overtick.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME', 'railway'),
-        'USER': os.environ.get('DATABASE_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'cqauhitbCJeKiBbBPxRPXGyrgAgzpPjK'),
-        'HOST': os.environ.get('DATABASE_HOST', 'roundhouse.proxy.rlwy.net'),
-        'PORT': os.environ.get('DATABASE_PORT', '37948'),
+        'NAME': config('DATABASE_NAME', default='railway'),
+        'USER': config('DATABASE_USER', default='postgres'),
+        'PASSWORD': config('DATABASE_PASSWORD', default='cqauhitbCJeKiBbBPxRPXGyrgAgzpPjK'),
+        'HOST': config('DATABASE_HOST', default='roundhouse.proxy.rlwy.net'),
+        'PORT': config('DATABASE_PORT', default='37948'),
     }
 }
 
@@ -146,3 +146,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Set the max file size limit
 MAX_FILE_SIZE = 524288000  # 500MB
+
