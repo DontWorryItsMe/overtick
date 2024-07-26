@@ -1,0 +1,50 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\edit_folder.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Edit Folder</h1>
+    <form method="post" id="editFolderForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" value="{{ folder.name }}">
+        </div>
+        <div class="form-group">
+            <label for="parent">Parent:</label>
+            <select id="parent" name="parent" class="form-control">
+                <option value="">------</option>
+                {% for f in folders %}
+                <option value="{{ f.id }}" {% if f.id == folder.parent_id %}selected{% endif %}>{{ f.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn green">Save</button>
+            <button type="button" class="btn gray" onclick="window.history.back()">Back</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.getElementById('editFolderForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    }).then(response => {
+        if (response.ok) {
+            window.history.back();
+        } else {
+            alert('Error saving changes.');
+        }
+    }).catch(error => {
+        alert('Error saving changes: ' + error);
+    });
+});
+</script>
+{% endblock %}

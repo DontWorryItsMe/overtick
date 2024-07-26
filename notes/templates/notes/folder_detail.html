@@ -1,0 +1,26 @@
+<!-- C:\Users\Admin\overtick\templates\notes\folder_detail.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Folder - {{ folder.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ folder.name }}</h2>
+<h5>Subfolders</h5>
+<ul class="collection">
+    {% for subfolder in subfolders %}
+        <li class="collection-item"><a href="{% url 'folder_detail' subfolder.pk %}">{{ subfolder.name }}</a></li>
+    {% endfor %}
+</ul>
+
+<h5>Notes</h5>
+<ul class="collection">
+    {% for note in notes %}
+        <li class="collection-item"><a href="{% url 'note_detail' note.pk %}">{{ note.title }}</a></li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'edit_folder' folder.id %}" class="btn">Edit</a> 
+<a href="{% url 'delete_folder' folder.id %}" class="btn red">Delete</a> 
+<a onclick="window.history.back()" class="btn">Back</a>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\view_folder.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Folder - {{ folder.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ folder.name }}</h2>
+<ul class="collection">
+    {% for note in notes %}
+    <li class="collection-item"><a href="{% url 'view_note' note.id %}">{{ note.title }}</a></li>
+    {% endfor %}
+</ul>
+<a href="{% url 'edit_folder' folder.id %}" class="btn">Edit</a> 
+<a href="{% url 'delete_folder' folder.id %}" class="btn red">Delete</a> 
+<a href="{% url 'index' %}" class="btn">Back</a>
+{% endblock %}

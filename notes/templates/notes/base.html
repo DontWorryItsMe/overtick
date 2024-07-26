@@ -1,0 +1,116 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}OverTick{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .layout {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        footer {
+            background-color: #181818;
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+            width: 100%;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{% url 'index' %}" class="logo">OVERTICK</a></h1>
+            <nav>
+                <div class="hamburger-menu" onclick="toggleMenu()">☰</div>
+                <ul class="nav-links">
+                    <li><a href="{% url 'index' %}">Dashboard</a></li>
+                    <li><a href="{% url 'upload_file' %}">Import</a></li>
+                    <li><a href="{% url 'create_note' %}">Compose</a></li>
+                    <li><a href="{% url 'create_folder' %}">Organize</a></li>
+                    <li><a href="{% url 'export_notes' %}">Export</a></li>
+                    <li><a href="{% url 'search' %}" data-hide="true">Search</a></li>
+                </ul>
+                <div class="search-container">
+                    <form method="GET" action="{% url 'search' %}">
+                        <input type="text" name="query" class="search-input" placeholder="Search">
+                        <button type="submit" class="search-btn"><i class="material-icons">search</i></button>
+                    </form>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="layout">
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 OVERTICK. All rights reserved.</p>
+        </div>
+    </footer>
+    <div id="toast"></div>
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Auto-lock after 10 minutes of inactivity
+        let idleTime = 0;
+        window.onload = resetTimer;
+        document.onmousemove = resetTimer;
+        document.onkeypress = resetTimer;
+
+        function resetTimer() {
+            clearTimeout(idleTime);
+            idleTime = setTimeout(() => {
+                sessionStorage.removeItem('authenticated');
+                window.location.href = "{% url 'login' %}";
+            }, 600000); // 10 minutes in milliseconds
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.className = 'show';
+            setTimeout(() => {
+                toast.className = toast.className.replace('show', '');
+            }, 3000);
+        }
+
+        const syncSocket = new WebSocket(
+            "ws://" + window.location.host + "/ws/sync/"
+        );
+
+        syncSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log(data.message);
+            showToast(data.message);
+        };
+
+        function sendMessage(message) {
+            syncSocket.send(JSON.stringify({"message": message}));
+        }
+
+        window.onbeforeunload = function () {
+            syncSocket.close();
+        };
+    </script>
+</body>
+</html>

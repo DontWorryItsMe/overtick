@@ -1,0 +1,30 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\create_note.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Create Note{% endblock %}
+
+{% block content %}
+<h2>Create Note</h2>
+<form method="post" class="edit-form full-width-form">
+    {% csrf_token %}
+    <div class="form-group full-width">
+        <label for="id_title">Title:</label>
+        {{ form.title }}
+    </div>
+    <div class="form-group full-width">
+        <label for="id_content">Content:</label>
+        {{ form.content }}
+    </div>
+    <div class="form-group full-width">
+        <label for="id_folder">Folder:</label>
+        {{ form.folder }}
+    </div>
+    <div class="form-group full-width">
+        <label for="id_tags">Tags:</label>
+        {{ form.tags }}
+    </div>
+    <button type="submit" class="btn green">Create</button>
+    <a href="{% url 'index' %}" class="btn">Back</a>
+</form>
+{% endblock %}

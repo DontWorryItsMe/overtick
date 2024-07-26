@@ -1,0 +1,26 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\export.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export Notes</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { text-align: center; }
+        .note { margin-bottom: 20px; }
+        .note h2 { margin: 0; }
+        .note p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <h1>Notes</h1>
+    {% for note in notes %}
+        <div class="note">
+            <h2>{{ note.title }}</h2>
+            <p>{{ note.content }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,13 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\view_note.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Note - {{ note.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ note.title }}</h2>
+<p>{{ note.content }}</p>
+<a href="{% url 'edit_note' note.id %}" class="btn">Edit</a> 
+<a href="{% url 'delete_note' note.id %}" class="btn red">Delete</a> 
+<a href="{% url 'index' %}" class="btn">Back</a>
+{% endblock %}

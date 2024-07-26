@@ -1,0 +1,18 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\note_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Note - {{ note.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ note.title }}</h2>
+<div id="note-content">
+    {{ content_html|safe }}
+</div>
+<p>Tags: {% for tag in note.tags.all %}<a href="{% url 'tag_detail' tag.pk %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<a href="{% url 'export_note' note.id %}" class="btn green">Export</a>
+<a href="{% url 'edit_note' note.id %}" class="btn">Edit</a> 
+<a href="{% url 'delete_note' note.id %}" class="btn red">Delete</a> 
+<a onclick="window.history.back()" class="btn">Back</a>
+{% endblock %}
+

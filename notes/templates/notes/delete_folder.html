@@ -1,0 +1,15 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\delete_folder.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Delete Folder{% endblock %}
+
+{% block content %}
+<h2>Delete Folder: {{ folder.name }}</h2>
+<p>Are you sure you want to delete this folder?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn red">Delete</button>
+    <a href="{% url 'index' %}" class="btn">Cancel</a>
+</form>
+{% endblock %}

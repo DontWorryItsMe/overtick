@@ -1,0 +1,17 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\view_file.html -->
+
+{% extends "base.html" %}
+
+{% block title %}File - {{ file.file.name }}{% endblock %}
+
+{% block content %}
+<h2>File: {{ file.file.name }}</h2>
+<p><h3>Details</h3></p>
+<p>File Size: {{ file.file.size }} bytes</p>
+<p>Description: {{ file.description }}</p>
+<p>Uploaded at: {{ file.uploaded_at }}</p>
+<a href="{{ file.file.url }}" class="btn green" target="_blank">View</a> 
+<a href="{% url 'edit_file' file.id %}" class="btn">Edit</a> 
+<a href="{% url 'delete_file' file.id %}" class="btn red">Delete</a> 
+<a href="{% url 'index' %}" class="btn">Back</a>
+{% endblock %}

@@ -1,0 +1,9 @@
+<!-- C:\Users\Admin\overtick\templates\notes\note_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>{{ note.title }}</h2>
+    <div>{{ content|safe }}</div>
+    <a href="{% url 'index' %}">Back to Notes</a>
+{% endblock %}

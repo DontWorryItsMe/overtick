@@ -1,0 +1,67 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\edit_file.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Edit File</h2>
+<form method="post" enctype="multipart/form-data" id="edit-file-form">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="file">Upload New File:</label>
+        {% if file.file.name %}
+            <p>Current file: {{ file.file.name }}</p>
+        {% endif %}
+        <input type="file" name="file" id="file" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" class="form-control">{{ file.description }}</textarea>
+    </div>
+    <div class="actions">
+        <button type="submit" class="btn green" onclick="submitForm(event)">Save changes</button>
+        <a onclick="window.history.back()" class="btn">Back</a>
+    </div>
+</form>
+
+<script>
+    let isFormDirty = false;
+
+    // Mark the form as dirty when any input changes
+    document.getElementById('edit-file-form').addEventListener('input', () => {
+        isFormDirty = true;
+    });
+
+    function submitForm(event) {
+        event.preventDefault();
+        const form = document.getElementById('edit-file-form');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                isFormDirty = false; // Reset the form dirty flag
+                history.back();
+            } else {
+                alert('Error saving changes.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Error saving changes.');
+        });
+    }
+
+    window.addEventListener('beforeunload', (event) => {
+        if (isFormDirty) {
+            event.preventDefault();
+            event.returnValue = 'You have unsaved changes. Do you really want to leave?';
+        }
+    });
+</script>
+{% endblock %}
+
+

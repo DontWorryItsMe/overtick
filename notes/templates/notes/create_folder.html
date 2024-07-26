@@ -1,0 +1,19 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\create_folder.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Create Folder{% endblock %}
+
+{% block content %}
+<h2>Create Folder</h2>
+<form method="post" class="edit-form full-width-form">
+    {% csrf_token %}
+    <div class="form-group full-width">
+        <label for="id_name">Folder Name:</label>
+        {{ form.name }}
+    </div>
+    <button type="submit" class="btn green">Create</button>
+    <a href="{% url 'index' %}" class="btn">Back</a>
+</form>
+{% endblock %}
+

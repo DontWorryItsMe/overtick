@@ -1,0 +1,41 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\search_results.html -->
+
+{% extends "base.html" %}
+{% load custom_filters %}
+
+{% block title %}Search Results{% endblock %}
+
+{% block content %}
+<div class="container search-results-container">
+    <div class="search-results-header">
+        <div class="header-left">
+            <i class="material-icons">search</i>
+            <span>Search Results</span>
+        </div>
+        <button class="close-btn" onclick="window.location.href='/'">
+            <i class="material-icons">close</i>
+        </button>
+    </div>
+    <form method="GET" action="{% url 'search' %}" class="search-container">
+        <input type="text" name="query" placeholder="Search notes, folders, or files" value="{{ query }}" class="search-input">
+        <button type="submit" class="btn search-btn">
+            <i class="material-icons">search</i>
+        </button>
+    </form>
+
+    <ul class="collection">
+        {% for result in results %}
+            <li class="search-results-item">
+                {% if result|instanceof:"Note" %}
+                    <a href="{% url 'note_detail' result.id %}">{{ result.title }}</a>
+                    <p>{{ result.content|highlight:query|safe }}</p>
+                {% elif result|instanceof:"Folder" %}
+                    <a href="{% url 'folder_detail' result.id %}">{{ result.name }}</a>
+                {% elif result|instanceof:"UploadedFile" %}
+                    <a href="{{ result.file.url }}">{{ result.file.name }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

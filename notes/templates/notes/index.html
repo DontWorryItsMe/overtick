@@ -1,0 +1,55 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\index.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Home - OverTick{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m6">
+        <h2>Folders</h2>
+        <ul id="folder-list" class="collection folder-list">
+            {% for folder in folders %}
+                <li class="collection-item"><a href="{% url 'folder_detail' folder.pk %}">{{ folder.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col s12 m6">
+        <h2>Notes</h2>
+        <ul id="note-list" class="collection note-list">
+            {% for note in notes %}
+                <li class="collection-item"><a href="{% url 'note_detail' note.pk %}">{{ note.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<h2>Uploaded Files</h2>
+<div class="responsive-table">
+    <table class="highlight">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Size</th>
+                <th>Uploaded Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="file-list">
+            {% for file in uploaded_files %}
+            <tr>
+                <td><a href="{% url 'view_file' file.id %}">{{ file.file.name }}</a></td>
+                <td>{{ file.file.size }} bytes</td>
+                <td>{{ file.uploaded_at }}</td>
+                <td>
+                    <a href="{% url 'download_file' file.id %}" class="material-icons">cloud_download</a>
+                    <a href="{% url 'edit_file' file.id %}" class="material-icons">edit</a>
+                    <a href="{% url 'delete_file' file.id %}" class="material-icons">delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

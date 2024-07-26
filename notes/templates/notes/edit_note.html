@@ -1,0 +1,71 @@
+<!-- C:\Users\Admin\overtick\notes\templates\notes\edit_note.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Edit Note{% endblock %}
+
+{% block content %}
+<h2>Edit Note</h2>
+<form method="post" class="edit-form" id="edit-note-form">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_title">Title:</label>
+        {{ form.title }}
+    </div>
+    <div class="form-group">
+        <label for="id_content">Content:</label>
+        {{ form.content }}
+    </div>
+    <div class="form-group">
+        <label for="id_folder">Folder:</label>
+        {{ form.folder }}
+    </div>
+    <div class="form-group">
+        <label for="id_tags">Tags:</label>
+        {{ form.tags }}
+    </div>
+    <button type="submit" class="btn green" onclick="submitForm(event)">Save changes</button>
+    <a onclick="window.history.back()" class="btn">Back</a>
+</form>
+
+<script>
+    let isFormDirty = false;
+
+    // Mark the form as dirty when any input changes
+    document.getElementById('edit-note-form').addEventListener('input', () => {
+        isFormDirty = true;
+    });
+
+    function submitForm(event) {
+        event.preventDefault();
+        const form = document.getElementById('edit-note-form');
+        const formData = new FormData(form);
+
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                isFormDirty = false; // Reset the form dirty flag
+                history.back();
+            } else {
+                alert('Error saving changes.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Error saving changes.');
+        });
+    }
+
+    window.addEventListener('beforeunload', (event) => {
+        if (isFormDirty) {
+            event.preventDefault();
+            event.returnValue = 'You have unsaved changes. Do you really want to leave?';
+        }
+    });
+</script>
+{% endblock %}
+
